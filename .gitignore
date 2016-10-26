@@ -1,2 +1,3 @@
 /**/*.bin
-
+/blinky/mbed_blinky.bin
+/blinky/main.o
