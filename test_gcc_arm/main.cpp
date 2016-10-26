@@ -16,6 +16,16 @@ void ledtoggle(DigitalOut* led) {
 
 int main() {
     pc.printf("mbed flashed and communication with PC is OK!");
+    led1 = 1;
+    led2 = 1;
+    led3 = 1;
+    led4 = 1;
+    wait(1);
+    led1 = 0;
+    led2 = 0;
+    led3 = 0;
+    led4 = 0;
+    wait(1);
     while(1) {
         ledtoggle(&led1);
         ledtoggle(&led2);
