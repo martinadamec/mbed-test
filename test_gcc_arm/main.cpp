@@ -7,11 +7,11 @@ DigitalOut led4(LED4);
 
 Serial pc(USBTX, USBRX);
 
-void ledtoggle(DigitalOut* led, double time = 0.2) {
+void ledtoggle(DigitalOut* led) {
     *led = 1;
-    wait(time);
+    wait(0.2);
     *led = 0;
-    wait(time);
+    wait(0.2);
 }
 
 int main() {
@@ -26,10 +26,15 @@ int main() {
     led3 = 0;
     led4 = 0;
     wait(1);
-    ledtoggle(&led1, 1);
-    ledtoggle(&led2, 1);
-    ledtoggle(&led3, 1);
-    ledtoggle(&led4, 1);
+    led1 = 1;
+    led2 = 1;
+    led3 = 1;
+    led4 = 1;
+    wait(1);
+    led1 = 0;
+    led2 = 0;
+    led3 = 0;
+    led4 = 0;
     wait(1);
     while(1) {
         ledtoggle(&led1);
