@@ -2,7 +2,7 @@
 # see http://mbed.org/handbook/Exporting-to-GCC-ARM-Embedded
 
 GCC_BIN =
-PROJECT = test_gcc_arm
+PROJECT = blinky
 OBJECTS = ./main.o
 SYS_OBJECTS = ./mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/cmsis_nvic.o ./mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/system_LPC17xx.o ./mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/startup_LPC17xx.o ./mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/retarget.o
 INCLUDE_PATHS = -I. -I./mbed -I./mbed/TARGET_LPC1768 -I./mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM
