@@ -19,13 +19,10 @@
 #include "platform.h"
 
 #include "gpio_api.h"
-#include "critical.h"
 
 namespace mbed {
 
 /** A digital input/output, used for setting or reading a bi-directional pin
- *
- * @Note Synchronization level: Interrupt safe
  */
 class DigitalInOut {
 
@@ -34,21 +31,8 @@ public:
      *
      *  @param pin DigitalInOut pin to connect to
      */
-    DigitalInOut(PinName pin) : gpio() {
-        // No lock needed in the constructor
-        gpio_init_in(&gpio, pin);
-    }
-
-    /** Create a DigitalInOut connected to the specified pin
-     *
-     *  @param pin DigitalInOut pin to connect to
-     *  @param direction the initial direction of the pin
-     *  @param mode the initial mode of the pin
-     *  @param value the initial value of the pin if is an output
-     */
-    DigitalInOut(PinName pin, PinDirection direction, PinMode mode, int value) : gpio() {
-        // No lock needed in the constructor
-        gpio_init_inout(&gpio, pin, direction, mode, value);
+    DigitalInOut(PinName pin) {
+        gpio_init(&gpio, pin, PIN_INPUT);
     }
 
     /** Set the output, specified as 0 or 1 (int)
@@ -57,7 +41,6 @@ public:
      *      0 for logical 0, 1 (or any other non-zero value) for logical 1
      */
     void write(int value) {
-        // Thread safe / atomic HAL call
         gpio_write(&gpio, value);
     }
 
@@ -68,24 +51,19 @@ public:
      *    or read the input if set as an input
      */
     int read() {
-        // Thread safe / atomic HAL call
         return gpio_read(&gpio);
     }
 
     /** Set as an output
      */
     void output() {
-        core_util_critical_section_enter();
         gpio_dir(&gpio, PIN_OUTPUT);
-        core_util_critical_section_exit();
     }
 
     /** Set as an input
      */
     void input() {
-        core_util_critical_section_enter();
         gpio_dir(&gpio, PIN_INPUT);
-        core_util_critical_section_exit();
     }
 
     /** Set the input pin mode
@@ -93,43 +71,28 @@ public:
      *  @param mode PullUp, PullDown, PullNone, OpenDrain
      */
     void mode(PinMode pull) {
-        core_util_critical_section_enter();
         gpio_mode(&gpio, pull);
-        core_util_critical_section_exit();
     }
 
-    /** Return the output setting, represented as 0 or 1 (int)
-     *
-     *  @returns
-     *    Non zero value if pin is connected to uc GPIO
-     *    0 if gpio object was initialized with NC
-     */
-    int is_connected() {
-        // Thread safe / atomic HAL call
-        return gpio_is_connected(&gpio);
-    }
-
+#ifdef MBED_OPERATORS
     /** A shorthand for write()
      */
     DigitalInOut& operator= (int value) {
-        // Underlying write is thread safe
         write(value);
         return *this;
     }
 
     DigitalInOut& operator= (DigitalInOut& rhs) {
-        core_util_critical_section_enter();
         write(rhs.read());
-        core_util_critical_section_exit();
         return *this;
     }
 
     /** A shorthand for read()
      */
     operator int() {
-        // Underlying call is thread safe
         return read();
     }
+#endif
 
 protected:
     gpio_t gpio;

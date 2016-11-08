@@ -24,8 +24,7 @@ extern "C" {
 
 enum CANFormat {
     CANStandard = 0,
-    CANExtended = 1,
-    CANAny = 2
+    CANExtended = 1
 };
 typedef enum CANFormat CANFormat;
 

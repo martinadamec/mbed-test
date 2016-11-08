@@ -18,13 +18,10 @@
 
 #include "platform.h"
 #include "gpio_api.h"
-#include "critical.h"
 
 namespace mbed {
 
 /** A digital output, used for setting the state of a pin
- *
- * @Note Synchronization level: Interrupt safe
  *
  * Example:
  * @code
@@ -48,19 +45,8 @@ public:
      *
      *  @param pin DigitalOut pin to connect to
      */
-    DigitalOut(PinName pin) : gpio() {
-        // No lock needed in the constructor
-        gpio_init_out(&gpio, pin);
-    }
-
-    /** Create a DigitalOut connected to the specified pin
-     *
-     *  @param pin DigitalOut pin to connect to
-     *  @param value the initial pin value
-     */
-    DigitalOut(PinName pin, int value) : gpio() {
-        // No lock needed in the constructor
-        gpio_init_out_ex(&gpio, pin, value);
+    DigitalOut(PinName pin) {
+        gpio_init(&gpio, pin, PIN_OUTPUT);
     }
 
     /** Set the output, specified as 0 or 1 (int)
@@ -69,7 +55,6 @@ public:
      *      0 for logical 0, 1 (or any other non-zero value) for logical 1
      */
     void write(int value) {
-        // Thread safe / atomic HAL call
         gpio_write(&gpio, value);
     }
 
@@ -80,42 +65,28 @@ public:
      *    0 for logical 0, 1 for logical 1
      */
     int read() {
-        // Thread safe / atomic HAL call
         return gpio_read(&gpio);
     }
 
-    /** Return the output setting, represented as 0 or 1 (int)
-     *
-     *  @returns
-     *    Non zero value if pin is connected to uc GPIO
-     *    0 if gpio object was initialized with NC
-     */
-    int is_connected() {
-        // Thread safe / atomic HAL call
-        return gpio_is_connected(&gpio);
-    }
-
+#ifdef MBED_OPERATORS
     /** A shorthand for write()
      */
     DigitalOut& operator= (int value) {
-        // Underlying write is thread safe
         write(value);
         return *this;
     }
 
     DigitalOut& operator= (DigitalOut& rhs) {
-        core_util_critical_section_enter();
         write(rhs.read());
-        core_util_critical_section_exit();
         return *this;
     }
 
     /** A shorthand for read()
      */
     operator int() {
-        // Underlying call is thread safe
         return read();
     }
+#endif
 
 protected:
     gpio_t gpio;

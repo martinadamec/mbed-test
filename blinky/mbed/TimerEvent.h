@@ -16,19 +16,15 @@
 #ifndef MBED_TIMEREVENT_H
 #define MBED_TIMEREVENT_H
 
-#include "ticker_api.h"
 #include "us_ticker_api.h"
 
 namespace mbed {
 
 /** Base abstraction for timer interrupts
- *
- * @Note Synchronization level: Interrupt safe
- */
+*/
 class TimerEvent {
 public:
     TimerEvent();
-    TimerEvent(const ticker_data_t *data);
 
     /** The handler registered with the underlying timer interrupt
      */
@@ -43,14 +39,12 @@ protected:
     virtual void handler() = 0;
 
     // insert in to linked list
-    void insert(timestamp_t timestamp);
+    void insert(unsigned int timestamp);
 
     // remove from linked list, if in it
     void remove();
 
     ticker_event_t event;
-
-    const ticker_data_t *_ticker_data;
 };
 
 } // namespace mbed

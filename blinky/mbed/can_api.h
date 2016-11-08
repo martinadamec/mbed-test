@@ -1,5 +1,5 @@
 /* mbed Microcontroller Library
- * Copyright (c) 2006-2016 ARM Limited
+ * Copyright (c) 2006-2013 ARM Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,8 +45,8 @@ typedef enum {
     MODE_RESET,
     MODE_NORMAL,
     MODE_SILENT,
-    MODE_TEST_LOCAL,
     MODE_TEST_GLOBAL,
+    MODE_TEST_LOCAL,
     MODE_TEST_SILENT
 } CanMode;
 
@@ -63,9 +63,8 @@ void          can_irq_free (can_t *obj);
 void          can_irq_set  (can_t *obj, CanIrqType irq, uint32_t enable);
 
 int           can_write    (can_t *obj, CAN_Message, int cc);
-int           can_read     (can_t *obj, CAN_Message *msg, int handle);
+int           can_read     (can_t *obj, CAN_Message *msg);
 int           can_mode     (can_t *obj, CanMode mode);
-int           can_filter(can_t *obj, uint32_t id, uint32_t mask, CANFormat format, int32_t handle);
 void          can_reset    (can_t *obj);
 unsigned char can_rderror  (can_t *obj);
 unsigned char can_tderror  (can_t *obj);

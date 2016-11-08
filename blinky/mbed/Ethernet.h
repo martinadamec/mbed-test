@@ -24,8 +24,6 @@ namespace mbed {
 
 /** An ethernet interface, to use with the ethernet pins.
  *
- * @Note Synchronization level: Not protected
- *
  * Example:
  * @code
  * // Read destination and source from every ethernet packet
@@ -91,7 +89,7 @@ public:
      *
      *  @returns
      *    0 if the sending was failed,
-     *    or the size of the packet successfully sent.
+     *    1 if the package is successfully sent.
      */
     int send();
 

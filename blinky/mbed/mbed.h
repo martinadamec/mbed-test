@@ -16,17 +16,8 @@
 #ifndef MBED_H
 #define MBED_H
 
-#define MBED_LIBRARY_VERSION 127
+#define MBED_LIBRARY_VERSION 30
 
-#if MBED_CONF_RTOS_PRESENT
-#include "rtos/rtos.h"
-#endif
-
-#if MBED_CONF_NSAPI_PRESENT
-#include "network-socket/nsapi.h"
-#endif
-
-#include "toolchain.h"
 #include "platform.h"
 
 // Useful C libraries
@@ -34,9 +25,8 @@
 #include <time.h>
 
 // mbed Debug libraries
-#include "mbed_error.h"
+#include "error.h"
 #include "mbed_interface.h"
-#include "mbed_assert.h"
 
 // mbed Peripheral components
 #include "DigitalIn.h"
@@ -58,24 +48,16 @@
 #include "I2CSlave.h"
 #include "Ethernet.h"
 #include "CAN.h"
-#include "RawSerial.h"
 
 // mbed Internal components
 #include "Timer.h"
 #include "Ticker.h"
 #include "Timeout.h"
-#include "LowPowerTimeout.h"
-#include "LowPowerTicker.h"
-#include "LowPowerTimer.h"
 #include "LocalFileSystem.h"
 #include "InterruptIn.h"
 #include "wait_api.h"
 #include "sleep_api.h"
 #include "rtc_time.h"
-
-// mbed Non-hardware components
-#include "Callback.h"
-#include "FunctionPointer.h"
 
 using namespace mbed;
 using namespace std;

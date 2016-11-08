@@ -22,21 +22,18 @@
 
 #include "can_api.h"
 #include "can_helper.h"
-#include "Callback.h"
-#include "PlatformMutex.h"
+#include "FunctionPointer.h"
 
 namespace mbed {
 
 /** CANMessage class
- *
- * @Note Synchronization level: Thread safe
  */
 class CANMessage : public CAN_Message {
 
 public:
     /** Creates empty CAN message.
      */
-    CANMessage() : CAN_Message() {
+    CANMessage() {
         len    = 8;
         type   = CANData;
         format = CANStandard;
@@ -134,13 +131,12 @@ public:
     /** Read a CANMessage from the bus.
      *
      *  @param msg A CANMessage to read to.
-     *  @param handle message filter handle (0 for any message)
      *
      *  @returns
      *    0 if no message arrived,
      *    1 if message arrived
      */
-    int read(CANMessage &msg, int handle = 0);
+    int read(CANMessage &msg);
 
     /** Reset CAN interface.
      *
@@ -162,30 +158,17 @@ public:
         GlobalTest,
         SilentTest
     };
-
+    
     /** Change CAN operation to the specified mode
      *
      *  @param mode The new operation mode (CAN::Normal, CAN::Silent, CAN::LocalTest, CAN::GlobalTest, CAN::SilentTest)
      *
      *  @returns
      *    0 if mode change failed or unsupported,
-     *    1 if mode change was successful
+     *    1 if mode change was successful     
      */
     int mode(Mode mode);
-
-    /** Filter out incomming messages
-     *
-     *  @param id the id to filter on
-     *  @param mask the mask applied to the id
-     *  @param format format to filter on (Default CANAny)
-     *  @param handle message filter handle (Optional)
-     *
-     *  @returns
-     *    0 if filter change failed or unsupported,
-     *    new filter handle if successful
-     */
-    int filter(unsigned int id, unsigned int mask, CANFormat format = CANAny, int handle = 0);
-
+    
     /** Returns number of read errors to detect read overflow errors.
      */
     unsigned char rderror();
@@ -203,53 +186,40 @@ public:
         EpIrq,
         AlIrq,
         BeIrq,
-        IdIrq,
-
-        IrqCnt
+        IdIrq
     };
-
+    
     /** Attach a function to call whenever a CAN frame received interrupt is
      *  generated.
      *
-     *  @param func A pointer to a void function, or 0 to set as none
+     *  @param fptr A pointer to a void function, or 0 to set as none
      *  @param event Which CAN interrupt to attach the member function to (CAN::RxIrq for message received, CAN::TxIrq for transmitted or aborted, CAN::EwIrq for error warning, CAN::DoIrq for data overrun, CAN::WuIrq for wake-up, CAN::EpIrq for error passive, CAN::AlIrq for arbitration lost, CAN::BeIrq for bus error)
      */
-    void attach(Callback<void()> func, IrqType type=RxIrq);
+    void attach(void (*fptr)(void), IrqType type=RxIrq);
 
    /** Attach a member function to call whenever a CAN frame received interrupt
     *  is generated.
     *
-    *  @param obj pointer to the object to call the member function on
-    *  @param method pointer to the member function to be called
+    *  @param tptr pointer to the object to call the member function on
+    *  @param mptr pointer to the member function to be called
     *  @param event Which CAN interrupt to attach the member function to (CAN::RxIrq for message received, TxIrq for transmitted or aborted, EwIrq for error warning, DoIrq for data overrun, WuIrq for wake-up, EpIrq for error passive, AlIrq for arbitration lost, BeIrq for bus error)
     */
-    template<typename T>
-    void attach(T* obj, void (T::*method)(), IrqType type=RxIrq) {
-        // Underlying call thread safe
-        attach(Callback<void()>(obj, method), type);
-    }
-
-   /** Attach a member function to call whenever a CAN frame received interrupt
-    *  is generated.
-    *
-    *  @param obj pointer to the object to call the member function on
-    *  @param method pointer to the member function to be called
-    *  @param event Which CAN interrupt to attach the member function to (CAN::RxIrq for message received, TxIrq for transmitted or aborted, EwIrq for error warning, DoIrq for data overrun, WuIrq for wake-up, EpIrq for error passive, AlIrq for arbitration lost, BeIrq for bus error)
-    */
-    template<typename T>
-    void attach(T* obj, void (*method)(T*), IrqType type=RxIrq) {
-        // Underlying call thread safe
-        attach(Callback<void()>(obj, method), type);
+   template<typename T>
+   void attach(T* tptr, void (T::*mptr)(void), IrqType type=RxIrq) {
+        if((mptr != NULL) && (tptr != NULL)) {
+            _irq[type].attach(tptr, mptr);
+            can_irq_set(&_can, (CanIrqType)type, 1);
+        }
+        else {
+            can_irq_set(&_can, (CanIrqType)type, 0);
+        }
     }
 
     static void _irq_handler(uint32_t id, CanIrqType type);
 
 protected:
-    virtual void lock();
-    virtual void unlock();
-    can_t               _can;
-    Callback<void()>    _irq[IrqCnt];
-    PlatformMutex       _mutex;
+    can_t           _can;
+    FunctionPointer _irq[9];
 };
 
 } // namespace mbed

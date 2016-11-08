@@ -41,8 +41,6 @@ typedef long off_t;
 #endif
 
 #include "platform.h"
-#include "SingletonPtr.h"
-#include "PlatformMutex.h"
 
 namespace mbed {
 
@@ -64,16 +62,12 @@ public:
 
     static FileBase *get(int n);
 
-    /* disallow copy constructor and assignment operators */
-private:
+protected:
     static FileBase *_head;
-    static SingletonPtr<PlatformMutex> _mutex;
 
     FileBase   *_next;
-    const char * const _name;
-    const PathType _path_type;
-    FileBase(const FileBase&);
-    FileBase & operator = (const FileBase&);
+    const char *_name;
+    PathType    _path_type;
 };
 
 } // namespace mbed
