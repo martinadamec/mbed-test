@@ -8,8 +8,8 @@ DigitalOut led4(LED4);
 Serial pc(USBTX, USBRX);
 
 void ledtoggle(DigitalOut* led) {
-    *led = 1;
-    wait(0.2);
+/*    *led = 1;
+    wait(0.2);*/
     *led = 0;
     wait(0.2);
 }
