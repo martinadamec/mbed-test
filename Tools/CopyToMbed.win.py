@@ -2,8 +2,10 @@
 
 import sys, getopt, time, shutil
 import serial
+import serial.tools.list_ports
 
 class ArgumentsException(Exception): pass
+class DetectPortException(Exception): pass
 
 class CopyTomMbed:
 
@@ -18,7 +20,7 @@ class CopyTomMbed:
 			raise ArgumentsException("Required arguments are 'f', 't', 'p'.")
 
 		# Get arguments
-		optlist, args = getopt.getopt(args, 'f:t:p:')
+		optlist, args = getopt.getopt(args, 'f:t:p')
 
 		# Still have arguments
 		if len(args) > 0: 
@@ -36,9 +38,12 @@ class CopyTomMbed:
 			if key == '-p': 
 				self.port = val
 
+		if self.port is None:
+			self.port = self.autoDetectPort()
+
 
 	def sendBreak(self, ser):
-		ser.send_break()
+		ser.sendBreak()
 
 
 	def restartMbed(self):
@@ -48,18 +53,36 @@ class CopyTomMbed:
 
 	def getSerial(self):
 		return serial.Serial(
-			port = '\\.\\' + self.port,
+			port = self.getPort(),
 			baudrate = 9600,
 			parity = serial.PARITY_NONE,
 			stopbits = serial.STOPBITS_ONE,
 			bytesize = serial.SEVENBITS
 		)
 
+	def getPort(self):
+		return '\\.\\' + self.port if sys.platform.startswith('win') else self.port
+
 	def copy(self):
 		shutil.copy(self.file, self.target)
 		time.sleep(2) # Delay for finish copy
 
+	def autoDetectPort(self):
+		# Get list of port with keyword "mbed"
+		ports = list(serial.tools.list_ports.grep('mbed'))
 
-inst = CopyTomMbed(sys.argv[1:])
-inst.copy()
-inst.restartMbed()
+		# No port
+		if len(ports) == 0:
+			raise DetectPortException("Not possible auto-detect mbed port.")
+
+		port = ports[0]
+		for p in port:
+			print p
+
+		# Get the first one
+		return ports[0][0]
+
+if __name__ == '__main__':
+	inst = CopyTomMbed(sys.argv[1:])
+	inst.copy()
+	inst.restartMbed()

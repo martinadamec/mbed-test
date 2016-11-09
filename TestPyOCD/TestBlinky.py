@@ -132,6 +132,6 @@ class BlinkyTest(TestCore):
 				"\n\n"
 			)
 
-
-test = BlinkyTest()
-test.runTests()
+if __name__ == '__main__':
+	test = BlinkyTest()
+	test.runTests()
