@@ -76,11 +76,10 @@ class CopyTomMbed:
 			raise DetectPortException("Not possible auto-detect mbed port.")
 
 		port = ports[0]
-		for p in port:
-			print p
+		print 'Auto detect port: %s' % str(port)
 
 		# Get the first one
-		return ports[0][0]
+		return port[0]
 
 if __name__ == '__main__':
 	inst = CopyTomMbed(sys.argv[1:])
