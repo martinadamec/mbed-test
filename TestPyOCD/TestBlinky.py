@@ -115,7 +115,7 @@ class BlinkyTest(TestCore):
 					target.resume()
 
 					# Delay
-					time.sleep(0.99)
+					time.sleep(0.98)
 				
 				self.printInfo(colored("PASS", "green"), "\n")
 
