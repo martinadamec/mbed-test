@@ -7,27 +7,38 @@ DigitalOut led4(LED4);
 
 Serial pc(USBTX, USBRX);
 
-void ledtoggle(DigitalOut* led) {
+void ledtoggle(DigitalOut* led, int on = 2, int off = 1) {
     *led = 1;
-    wait(0.2);
+    wait(on);
     *led = 0;
-    wait(0.2);
+    wait(off);
+}
+
+void AppInit() {
+    // 1 && 4
+    led1 = 1;
+    led4 = 1;
+    wait(0.5);
+    led1 = 0;
+    led4 = 0;
+
+    // 2 && 3
+    led2 = 1;
+    led3 = 1;
+    wait(0.5);
+    led2 = 0;
+    led3 = 0;
 }
 
 int main() {
-    pc.printf("mbed flashed and communication with PC is OK!");
-    led1 = 1;
-    led4 = 1;
-    wait(1);
-    led1 = 0;
-    led4 = 0;
-    wait(1);
-    led2 = 1;
+
+    AppInit();
     led3 = 1;
+    led2 = 1;
     wait(1);
-    led2 = 0;
     led3 = 0;
-    wait(1);
+    led2 = 0;
+
     while(1) {
         ledtoggle(&led1);
         ledtoggle(&led2);

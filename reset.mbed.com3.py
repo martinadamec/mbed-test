@@ -1,8 +1,7 @@
 import time
 import serial
-print 'Reset start sleep!\r\n'
+
 time.sleep(5)
-print 'Reset start!\r\n'
 # configure the serial connections
 ser = serial.Serial(
     port='\\.\COM3',
@@ -23,5 +22,3 @@ while ser.inWaiting() > 0:
 
 if out != '':
     print ">>" + out
-
-print 'Reset done!\r\n'
