@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 
-import time
-import sys
+import time, sys, inspect, os
 import logging
+
+path = os.path.dirname(inspect.getfile(inspect.currentframe()))
+sys.path.insert(1, os.path.join(path, '..', 'Tools'))
 
 from Core.TestCore import TestCore
 from Core.TestException import TestException
 from Lib.termcolor import colored
+from CopyToMbed import CopyToMbed
 
 logging.basicConfig(level=logging.ERROR)
 
@@ -122,8 +125,7 @@ class BlinkyTest(TestCore):
 		except (AssertionError) as e:
 			self.printInfo(colored("FAIL", "red"), "\n")
 			self.printInfo("AssertionError: ", str(e), "\n")
-			#raise e
-			sys.exit(1)
+			raise TestException()
 
 		finally:
 			# Test info
@@ -133,5 +135,18 @@ class BlinkyTest(TestCore):
 			)
 
 if __name__ == '__main__':
-	test = BlinkyTest()
-	test.runTests()
+	# Copy file to target adn restart
+	inst = CopyToMbed(sys.argv[1:])
+	testFilename = inst.copy(True)
+	time.sleep(1)
+
+	try:
+		test = BlinkyTest()
+		test.runTests()
+	except Exception as e:
+		raise # re-raise the error
+	finally:
+		try:
+		    os.remove(testFilename)
+		except OSError:
+			pass
