@@ -105,16 +105,16 @@ class BlinkyTest(TestCore):
 					target.halt()
 					for y in range(1, 5):
 						if y == led:
-							assert self.isLedOn(target, y) is True, "[%d] The led %d should be %s" % (led, y, 'on')
+							assert self.isLedOn(target, y) is True, "[%d on] The led %d should be %s" % (led, y, 'on')
 						else:
-							assert self.isLedOn(target, y) is False, "[%d] The led %d should be %s" % (led, y, 'off')
+							assert self.isLedOn(target, y) is False, "[%d on] The led %d should be %s" % (led, y, 'off')
 					target.resume()
 
 					# Wait for off
 					time.sleep(1.99)
 					target.halt()
 					for y in range(1, 5):
-						assert self.isLedOn(target, y) is False, "[%d] The led %d should be %s" % (led, y, 'off')
+						assert self.isLedOn(target, y) is False, "[%d off] The led %d should be %s" % (led, y, 'off')
 					target.resume()
 
 					# Delay
@@ -148,5 +148,6 @@ if __name__ == '__main__':
 	finally:
 		try:
 		    os.remove(testFilename)
+		    inst.restartMbed()
 		except OSError:
 			pass
