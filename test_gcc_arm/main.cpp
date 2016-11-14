@@ -23,11 +23,9 @@ void AppInit() {
     led4 = 0;
 
     // 2 && 3
-    led2 = 1;
     led3 = 1;
     wait(1.5);
     led3 = 0;
-    led2 = 0;
 }
 
 int main() {
