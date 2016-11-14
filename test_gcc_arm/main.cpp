@@ -15,12 +15,6 @@ void ledtoggle(DigitalOut* led, int on = 2, int off = 1) {
 }
 
 void AppInit() {
-    // 1 && 4
-    led1 = 1;
-    led4 = 1;
-    wait(0.5);
-    led1 = 0;
-    led4 = 0;
 
     // 2 && 3
     led2 = 1;
@@ -28,16 +22,17 @@ void AppInit() {
     wait(0.5);
     led2 = 0;
     led3 = 0;
+    // 1 && 4
+    led1 = 1;
+    led4 = 1;
+    wait(0.5);
+    led1 = 0;
+    led4 = 0;
 }
 
 int main() {
 
     AppInit();
-    led3 = 1;
-    led2 = 1;
-    wait(1);
-    led3 = 0;
-    led2 = 0;
 
     while(1) {
         ledtoggle(&led1);
