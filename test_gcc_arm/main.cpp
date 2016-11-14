@@ -23,7 +23,7 @@ void AppInit() {
     led1 = 0;
     led2 = 0;
 
-    wait(1);
+    wait(0.5);
     // 1 && 4
     led3 = 1;
     led4 = 1;
