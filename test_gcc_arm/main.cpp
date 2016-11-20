@@ -1,5 +1,6 @@
 #include "mbed.h"
 
+int* flag = (int*) 0x10005000;
 DigitalOut led1(LED1);
 DigitalOut led2(LED2);
 DigitalOut led3(LED3);
@@ -31,8 +32,9 @@ void AppInit() {
 int main() {
 
     AppInit();
-
+    *flag=0;
     while(1) {
+        *flag=1;
         ledtoggle(&led1);
         ledtoggle(&led2);
         ledtoggle(&led3);

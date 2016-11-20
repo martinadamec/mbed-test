@@ -1,4 +1,7 @@
 /blinky/mbed_blinky.bin
 /blinky/main.o
-
+/test_gcc_arm/*.o
+/test_gcc_arm/*.elf
+/test_gcc_arm/*.bin
+*.pyc
 /test_gcc_arm/test_gcc_arm.bin
