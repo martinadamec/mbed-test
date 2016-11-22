@@ -1,0 +1,60 @@
+000001c8 <matrixMultiplication(int (*) [10], int (*) [10], int (*) [10], int, int, int)>:
+     1c8:	e92d 47f0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, r10, lr}
+     1cc:	2b00      	cmp	r3, #0
+     1ce:	b088      	sub	sp, #32
+     1d0:	9005      	str	r0, [sp, #20]
+     1d2:	9106      	str	r1, [sp, #24]
+     1d4:	9207      	str	r2, [sp, #28]
+     1d6:	f8dd 8040 	ldr.w	r8, [sp, #64]	; 0x40
+     1da:	f8dd 9044 	ldr.w	r9, [sp, #68]	; 0x44
+     1de:	9303      	str	r3, [sp, #12]
+     1e0:	dd38      	ble.n	254 <matrixMultiplication(int (*) [10], int (*) [10], int (*) [10], int, int, int)+0x8c>
+     1e2:	f109 4380 	add.w	r3, r9, #1073741824	; 0x40000000
+     1e6:	3b01      	subs	r3, #1
+     1e8:	2200      	movs	r2, #0
+     1ea:	009b      	lsls	r3, r3, #2
+     1ec:	9201      	str	r2, [sp, #4]
+     1ee:	9304      	str	r3, [sp, #16]
+     1f0:	9202      	str	r2, [sp, #8]
+     1f2:	f1b8 0f00 	cmp.w	r8, #0
+     1f6:	dd24      	ble.n	242 <matrixMultiplication(int (*) [10], int (*) [10], int (*) [10], int, int, int)+0x7a>
+     1f8:	9b01      	ldr	r3, [sp, #4]
+     1fa:	9a04      	ldr	r2, [sp, #16]
+     1fc:	9905      	ldr	r1, [sp, #20]
+     1fe:	18d7      	adds	r7, r2, r3
+     200:	f1a3 0a04 	sub.w	r10, r3, #4
+     204:	440f      	add	r7, r1
+     206:	448a      	add	r10, r1
+     208:	9907      	ldr	r1, [sp, #28]
+     20a:	9e06      	ldr	r6, [sp, #24]
+     20c:	18cd      	adds	r5, r1, r3
+     20e:	f04f 0e00 	mov.w	lr, #0
+     212:	f1b9 0f00 	cmp.w	r9, #0
+     216:	dd0c      	ble.n	232 <matrixMultiplication(int (*) [10], int (*) [10], int (*) [10], int, int, int)+0x6a>
+     218:	4652      	mov	r2, r10
+     21a:	6829      	ldr	r1, [r5, #0]
+     21c:	2300      	movs	r3, #0
+     21e:	f852 0f04 	ldr.w	r0, [r2, #4]!
+     222:	58f4      	ldr	r4, [r6, r3]
+     224:	42ba      	cmp	r2, r7
+     226:	fb04 1100 	mla	r1, r4, r0, r1
+     22a:	f103 0328 	add.w	r3, r3, #40	; 0x28
+     22e:	6029      	str	r1, [r5, #0]
+     230:	d1f5      	bne.n	21e <matrixMultiplication(int (*) [10], int (*) [10], int (*) [10], int, int, int)+0x56>
+     232:	f10e 0e01 	add.w	lr, lr, #1
+     236:	45c6      	cmp	lr, r8
+     238:	f106 0604 	add.w	r6, r6, #4
+     23c:	f105 0504 	add.w	r5, r5, #4
+     240:	d1e7      	bne.n	212 <matrixMultiplication(int (*) [10], int (*) [10], int (*) [10], int, int, int)+0x4a>
+     242:	9a01      	ldr	r2, [sp, #4]
+     244:	9b02      	ldr	r3, [sp, #8]
+     246:	3228      	adds	r2, #40	; 0x28
+     248:	9201      	str	r2, [sp, #4]
+     24a:	9a03      	ldr	r2, [sp, #12]
+     24c:	3301      	adds	r3, #1
+     24e:	4293      	cmp	r3, r2
+     250:	9302      	str	r3, [sp, #8]
+     252:	d1ce      	bne.n	1f2 <matrixMultiplication(int (*) [10], int (*) [10], int (*) [10], int, int, int)+0x2a>
+     254:	b008      	add	sp, #32
+     256:	e8bd 87f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, r9, r10, pc}
+     25a:	bf00      	nop

@@ -16,6 +16,7 @@ CC      = $(GCC_BIN)arm-none-eabi-gcc
 CPP     = $(GCC_BIN)arm-none-eabi-g++
 LD      = $(GCC_BIN)arm-none-eabi-gcc
 OBJCOPY = $(GCC_BIN)arm-none-eabi-objcopy
+DISAS   = $(GCC_BIN)arm-none-eabi-objdump
 
 CPU = -mcpu=cortex-m3 -mthumb
 CC_FLAGS = $(CPU) -c -Os -fno-common -fmessage-length=0 -Wall -fno-exceptions -ffunction-sections -fdata-sections
@@ -24,10 +25,11 @@ CC_SYMBOLS = -DTARGET_LPC1768 -DTARGET_M3 -DTARGET_NXP -DTARGET_LPC176X -DTOOLCH
 LD_FLAGS = -mcpu=cortex-m3 -mthumb -Wl,--gc-sections --specs=nano.specs -u _printf_float -u _scanf_float
 LD_SYS_LIBS = -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys
 
-all: $(PROJECT).bin
+all: $(PROJECT).disasm
 
 clean:
-	rm -f $(PROJECT).bin $(PROJECT).elf $(OBJECTS)
+	rm -f $(PROJECT).bin $(PROJECT).elf $(PROJECT).disasm $(OBJECTS)
+
 
 .s.o:
 	$(AS) $(CPU) -o $@ $<
@@ -44,3 +46,6 @@ $(PROJECT).elf: $(OBJECTS) $(SYS_OBJECTS)
 
 $(PROJECT).bin: $(PROJECT).elf
 	$(OBJCOPY) -O binary $< $@
+
+$(PROJECT).disasm: $(PROJECT).bin
+	arm-none-eabi-objdump -d -f -M reg-names-std --demangle $(PROJECT).elf > $@

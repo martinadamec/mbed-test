@@ -1,0 +1,25 @@
+000001c8 <bubbleSort(char*, int)>:
+     1c8:	2900      	cmp	r1, #0
+     1ca:	dd15      	ble.n	1f8 <bubbleSort(char*, int)+0x30>
+     1cc:	b470      	push	{r4, r5, r6}
+     1ce:	1e4d      	subs	r5, r1, #1
+     1d0:	4405      	add	r5, r0
+     1d2:	2600      	movs	r6, #0
+     1d4:	2901      	cmp	r1, #1
+     1d6:	d00a      	beq.n	1ee <bubbleSort(char*, int)+0x26>
+     1d8:	4603      	mov	r3, r0 
+     1da:	781a      	ldrb	r2, [r3, #0]
+     1dc:	f813 4f01 	ldrb.w	r4, [r3, #1]!
+     1e0:	42a2      	cmp	r2, r4
+     1e2:	bf84      	itt	hi
+     1e4:	f803 4c01 	strbhi.w	r4, [r3, #-1]
+     1e8:	701a      	strbhi	r2, [r3, #0]
+     1ea:	42ab      	cmp	r3, r5
+     1ec:	d1f5      	bne.n	1da <bubbleSort(char*, int)+0x12>
+     1ee:	3601      	adds	r6, #1
+     1f0:	428e      	cmp	r6, r1
+     1f2:	d1ef      	bne.n	1d4 <bubbleSort(char*, int)+0xc>
+     1f4:	bc70      	pop	{r4, r5, r6}
+     1f6:	4770      	bx	lr
+     1f8:	4770      	bx	lr
+     1fa:	bf00      	nop

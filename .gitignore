@@ -5,3 +5,4 @@
 /test_gcc_arm/*.bin
 *.pyc
 /test_gcc_arm/test_gcc_arm.bin
+*.xlsx
