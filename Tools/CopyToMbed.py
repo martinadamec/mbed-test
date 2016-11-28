@@ -90,6 +90,7 @@ class CopyToMbed:
 
 		port = ports[0]
 		print 'Auto detect port: %s' % str(port)
+		sys.stdout.flush()
 
 		# Get the first one
 		return port[0]
