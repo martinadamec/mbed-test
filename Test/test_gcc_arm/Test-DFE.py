@@ -32,8 +32,8 @@ except Exception as e:
 	raise # re-raise the error
 finally:
 	try:
-	    os.remove(testFilename)
-	    inst.restartMbed()
+		os.remove(testFilename)
+		inst.restartMbed()
 		os.remove(os.path.join(path, '..', "..", "resultsDeterDFE.xlsx"))
 	except OSError:
 		pass
