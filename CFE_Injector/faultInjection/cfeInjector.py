@@ -334,7 +334,7 @@ class CFEInjector:
         result=True
 
         #Create the name of the correct Edges file. The layout must be Edges + the name of the parameter disassembly file without .disasm
-        fileTitle="Edges" + disassemblyFileName[0:-7] + ".txt"
+        fileTitle="Edges" + os.path.basename(disassemblyFileName)[0:-7] + ".txt"
 
         #Opens the two files that we want to compare and read them line by line.
         with open (fileTitle,"r") as myFile:
@@ -578,12 +578,14 @@ class CFEInjector:
                 cfg.append(BasicBlock(int(beginning[n], 16), int(end[n], 16), int(falseJump,16), int(trueJump,16), listBlock))
 
         #Call the validation function
+        """
         edgesValidate=self.validationEdges(cfg, dictionnaryNumBeginning, disassemblyFileName)
         if(edgesValidate):
             logging.log(25, "Edges are true, correct Control Flow Graph")
         else:
             logging.error("Edges are false, incorrect Control Flow Graph")
             raise Exception("Build the wrong CFG! Aborted CFE Injection")
+        """
 
         return cfg
 
