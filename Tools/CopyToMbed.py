@@ -45,12 +45,16 @@ class CopyToMbed:
 		if self.port is None:
 			self.port = self.autoDetectPort()
 
+
+	## Method for restart mbed on serial port
 	def restartMbed(self):
 		ser = self.getSerial()
 		ser.isOpen()
 		ser.sendBreak()
 		ser.close()
 
+
+	## Method for open serial port for communication
 	def getSerial(self):
 		return serial.Serial(
 			port = self.getPort(),
@@ -60,9 +64,13 @@ class CopyToMbed:
 			bytesize = serial.SEVENBITS
 		)
 
+
+	## Get port name (depands on OS)
 	def getPort(self):
 		return '\\.\\' + self.port if sys.platform.startswith('win') else self.port
 
+
+	## Copy file to mbed device and call restart
 	def copy(self, restart = False):
 		output = self.getDestPath()
 		shutil.copy(self.file, output)
@@ -73,6 +81,8 @@ class CopyToMbed:
 
 		return output
 
+
+	## Get filename for target (in test mode is prefixed by 'test.')
 	def getDestPath(self):
 		if self.mode == 'test':
 			filename = os.path.basename(self.file)
@@ -80,6 +90,8 @@ class CopyToMbed:
 		else:
 			return self.target
 
+
+	## Mbed port auto detection
 	def autoDetectPort(self):
 		# Get list of port with keyword "mbed"
 		ports = list(serial.tools.list_ports.grep('mbed'))
