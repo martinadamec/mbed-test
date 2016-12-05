@@ -2,7 +2,7 @@
 
 import sys, getopt, time, shutil, os
 import logging
-import serial
+import serial, serial.tools.list_ports
 
 class ArgumentsException(Exception): pass
 class DetectPortException(Exception): pass
