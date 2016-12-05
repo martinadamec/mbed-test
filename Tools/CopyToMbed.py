@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import sys, getopt, time, shutil, os
+import logging
 import serial
-import serial.tools.list_ports
 
 class ArgumentsException(Exception): pass
 class DetectPortException(Exception): pass
@@ -59,9 +59,9 @@ class CopyToMbed:
 		return serial.Serial(
 			port = self.getPort(),
 			baudrate = 9600,
-			parity = serial.PARITY_NONE,
-			stopbits = serial.STOPBITS_ONE,
-			bytesize = serial.SEVENBITS
+			#parity = serial.PARITY_NONE,
+			#stopbits = serial.STOPBITS_ONE,
+			#bytesize = serial.SEVENBITS
 		)
 
 
@@ -94,14 +94,17 @@ class CopyToMbed:
 	## Mbed port auto detection
 	def autoDetectPort(self):
 		# Get list of port with keyword "mbed"
-		ports = list(serial.tools.list_ports.grep('mbed'))
+		if sys.platform.startswith('win'):
+			ports = list(serial.tools.list_ports.grep('mbed'))
+		else:
+			ports = list(serial.tools.list_ports.grep('/dev/ttyACM'))
 
 		# No port
 		if len(ports) == 0:
 			raise DetectPortException("Not possible auto-detect mbed port.")
 
 		port = ports[0]
-		print 'Auto detect port: %s' % str(port)
+        logging.info('Auto detect port: %s' % str(port))
 		sys.stdout.flush()
 
 		# Get the first one

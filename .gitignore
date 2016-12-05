@@ -7,3 +7,4 @@
 /test_gcc_arm/test_gcc_arm.bin
 *.xlsx
 !/CFE_Injector/randomCFEInjection.xlsx
+*.disasm
