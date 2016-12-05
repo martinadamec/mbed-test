@@ -104,7 +104,7 @@ class CopyToMbed:
 			raise DetectPortException("Not possible auto-detect mbed port.")
 
 		port = ports[0]
-        logging.info('Auto detect port: %s' % str(port))
+		logging.info('Auto detect port: %s' % str(port))
 		sys.stdout.flush()
 
 		# Get the first one
