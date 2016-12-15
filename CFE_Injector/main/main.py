@@ -5,7 +5,7 @@ import logging
 from faultInjection.PC_injector import PCinjector
 from faultInjection.cfeInjector import CFEInjector
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=25)
 
 def testReadPC():
     inj = PCinjector()
