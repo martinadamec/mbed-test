@@ -9,20 +9,41 @@ from email import encoders
 
 class SendEmail:
 
+	# E-mail variables
 	subject = None
 	text = None
 	send_from = "noreply@kuleuven.be"
 
+	# SMTP setting
+	localhost = False
+	username = 'remikuleuven@gmail.com'
+	password = 'aaaaa123'
+	smtp_server = 'smtp.gmail.com:587'
+
+
+	## Constructor
+	# @param  string  subject  The subject of the e-mail
+	# @param  string  text     The text of the e-mail
 	def __init__(self, subject = None, text = None):
 		self.subject = subject
 		self.text = text
 
+	## Setter for variable 'subject'
+	# @param  string  subject 
 	def setSubject(self, subject):
 		self.subject = subject
 
+
+	## Setter for variable 'text'
+	# @param  string  text 
 	def setText(self, text):
 		self.text = text
 
+
+	## Attach XLSX file to mail
+	# @param  object  msg       Object of 'MIMEMultipart'
+	# @param  string  filename  Name of the file in email
+	# @param  string  path      Full path to the file
 	def addXlsxFile(self, msg, filename, path):
 		part = MIMEBase('application', "octet-stream")
 		part.set_payload(open(path, "rb").read())
@@ -30,6 +51,9 @@ class SendEmail:
 		part.add_header('Content-Disposition', 'attachment; filename="' + filename + '"')
 		msg.attach(part)
 
+
+	## Method for create new email and send
+	# @param  string  send_to  E-mail address of recipient
 	def send(self, send_to):
 		msg = MIMEMultipart()
 		msg['From'] = self.send_from
@@ -46,5 +70,20 @@ class SendEmail:
 		smtp.sendmail(self.send_from, send_to, msg.as_string())
 		smtp.quit()
 
+
+	## Method for attach files
+	# @param  object  msg  Object of 'MIMEMultipart'
+	def addFiles(self, msg):
+		pass
+
+
+	## Establish SMTP connection
 	def establishSMTP(self):
-		return smtplib.SMTP("localhost")
+		if self.localhost:
+			return smtplib.SMTP("localhost")
+		else:
+			server = smtplib.SMTP(self.smtp_server)
+			server.ehlo()
+			server.starttls()
+			server.login(self.username, self.password)
+			return server

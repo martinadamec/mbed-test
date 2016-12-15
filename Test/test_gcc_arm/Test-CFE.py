@@ -29,7 +29,7 @@ except Exception as e:
 	raise # re-raise the error
 finally:
 	try:
-		#os.remove(testDisasm_filename)
+		os.remove(testDisasm_filename)
 		os.remove(testFilename)
 		inst.restartMbed()
 	except OSError:

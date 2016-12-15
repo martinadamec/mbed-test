@@ -16,7 +16,11 @@ class BlinkyEmail(SendEmail):
 	send_from = "martin.adamec@student.kuleuven.be"
 
 	def addFiles(self, msg):
-		self.addXlsxFile(msg, "resultsDeterDFE.xlsx", os.path.join(path, '..', "..", "resultsDeterDFE.xlsx"))
+		self.addXlsxFile(
+			msg, 
+			"resultsDeterDFE.xlsx", 
+			os.path.join(path, '..', "..", "resultsDeterDFE.xlsx")
+		)
 
 
 # Copy file to target adn restart
